@@ -1,0 +1,27 @@
+name: Build La Pauta Verb
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Upload VST3
+      uses: actions/upload-artifact@v4
+      with:
+        name: LaPautaVerb-VST3
+        path: build/**/*.vst3
