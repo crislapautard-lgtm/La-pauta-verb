@@ -1,31 +1,29 @@
-#define MyAppName "La Pauta Verb"
-#define MyAppVersion "1.0.0"
-#define MyPublisher "La Pauta"
-#define MyVst3Path "..\\build\\LaPautaVerb_artefacts\\Release\\VST3\\La Pauta Verb.vst3"
-
+; Instalador de La Pauta Verb (Inno Setup 6)
 [Setup]
-AppId={{C9A7B3F1-5B26-4B17-9A70-8D9B9C9A1F30}
-AppName={#MyAppName}
-AppVersion={#MyAppVersion}
-AppPublisher={#MyPublisher}
-DefaultDirName={commoncf}\VST3\La Pauta Verb.vst3
+AppId={{B7F3C2A1-5D4E-4A8B-9C61-2E7D1F0A9B34}
+AppName=La Pauta Verb
+AppVersion=1.0.0
+AppPublisher=La Pauta
+DefaultDirName={autopf}\La Pauta\La Pauta Verb
 DisableDirPage=yes
 DisableProgramGroupPage=yes
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
 PrivilegesRequired=admin
-ArchitecturesInstallIn64BitMode=x64
-OutputDir=..\dist
-OutputBaseFilename=La-Pauta-Verb-Setup-1.0.0-x64
+OutputDir=..\installer_output
+OutputBaseFilename=LaPautaVerb-Setup-1.0.0
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
-Uninstallable=yes
+UninstallDisplayName=La Pauta Verb (VST3)
+
+[Languages]
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Files]
-Source: "{#MyVst3Path}\\*"; DestDir: "{commoncf}\VST3\La Pauta Verb.vst3"; Flags: ignoreversion recursesubdirs createallsubdirs
-
-[UninstallDelete]
-Type: filesandordirs; Name: "{commoncf}\VST3\La Pauta Verb.vst3"
+Source: "..\build\LaPautaVerb_artefacts\Release\VST3\La Pauta Verb.vst3\*"; \
+    DestDir: "{commoncf64}\VST3\La Pauta Verb.vst3"; \
+    Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Messages]
-WelcomeLabel2=Este asistente instalará [name] en la carpeta VST3 compartida de Windows.%n%nDespués de instalarlo, abre tu DAW y vuelve a escanear los plugins VST3.
-FinishedLabel=La Pauta Verb se instaló correctamente.%n%nAbre tu DAW y vuelve a escanear los plugins VST3 para comenzar a usarlo.
+spanish.FinishedLabel=La Pauta Verb se instalo en la carpeta VST3. Reescanea los plugins en tu DAW.
