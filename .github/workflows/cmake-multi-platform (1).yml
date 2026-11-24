@@ -1,0 +1,43 @@
+name: Build La Pauta Verb
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: LaPautaVerb-VST3
+          path: build/LaPautaVerb_artefacts/Release/VST3/
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse "build\LaPautaVerb_artefacts" -Filter *.vst3 | Select-Object FullName
+          $iss = Get-ChildItem -Recurse -Filter LaPautaVerb.iss | Select-Object -First 1
+          if (-not $iss) { throw "No se encontro LaPautaVerb.iss en el repo" }
+          Write-Host "Usando: $($iss.FullName)"
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "/DRepo=$env:GITHUB_WORKSPACE" $iss.FullName
+          if ($LASTEXITCODE -ne 0) { throw "ISCC fallo" }
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: LaPautaVerb-Instalador
+          path: installer_output/LaPautaVerb-Setup-1.0.0.exe
